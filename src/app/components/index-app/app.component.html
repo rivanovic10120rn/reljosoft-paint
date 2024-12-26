@@ -1,18 +1,23 @@
 
 <div class="container">
   <section class="tools-board">
-    <div class="row">
+    <div class="all-toolbars">
+      <div class="row shapes-toolbar">
       <label class="title"> Shapes </label>
-      <ul class="option">
-        <li class="option">
+      <ul class="options shapes">
+        <li class="option shape" id="line">
+          <img src="../../../assets/icons/tools/icons8-line-32.png">
+          <span class="name"> Line </span>
+        </li>
+        <li class="option shape" id="circle">
           <img src="../../../assets/icons/tools/icons8-circle-32.png">
           <span> Circle </span>
         </li>
-        <li class="option">
-          <img src="../../../assets/icons/tools/icons8-rectangle-32.png">
+        <li class="option shape" id="rectangle">
+          <img src="../../../assets/icons/tools/icons8-stop-32.png">
           <span> Rectangle </span>
         </li>
-        <li class="option">
+        <li class="option shape" id="triangle">
           <img src="../../../assets/icons/tools/icons8-triangle-32.png">
           <span> Triangle </span>
         </li>
@@ -22,45 +27,67 @@
         </li>
       </ul>
     </div>
-    <div class="row">
-      <label class="title"> Tools </label>
-      <ul class="option">
-        <li class="option">
-          <img src="../../../assets/icons/tools/icons8-brush-48.png">
-          <span class="name"> Brush </span>
-        </li>
-        <li class="option">
-          <img src="../../../assets/icons/tools/icons8-eraser-48 (1).png">
-          <span class="name"> Eraser </span>
-        </li>
-        <li class="option">
-          <img src="../../../assets/icons/tools/icons8-fill-color-48.png">
-          <span class="name"> Fill Color </span>
-        </li>
-        <li class="option">
-          <input type="range" id="size-slider" min="1" max="10" value="5">
-        </li>
-      </ul>
+      <div class="row tools-toolbar">
+        <label class="title"> Tools </label>
+        <ul class="options tools">
+          <li class="option tool active" id="brush">
+            <img src="../../../assets/icons/tools/icons8-brush-48.png">
+            <span class="name"> Brush </span>
+          </li>
+          <li class="option tool" id="eraser">
+            <img src="../../../assets/icons/tools/icons8-eraser-48 (1).png">
+            <span class="name"> Eraser </span>
+          </li>
+          <li class="option tool" id="fill">
+            <img src="../../../assets/icons/tools/icons8-fill-color-48.png">
+            <span class="name"> Fill Color </span>
+          </li>
+          <li class="option" id="slider">
+            <input type="range" id="size-slider" min="1" max="100" value="25">
+          </li>
+        </ul>
+      </div>
+      POTENCIJALNO JOS JEDAN DIV OVDE (doublejoined-toolbars)
+      <div class="row colors-toolbar">
+        <label class="title"> Colours </label>
+        <ul class="options colors">
+          <li class="option selected"></li>
+          <li class="option"></li>
+          <li class="option"></li>
+          <li class="option"></li>
+          <li class="option">
+            <input type="color" id="custom-color">
+          </li>
+        </ul>
+      </div>
+      <div class="row actions-toolbar">
+        <label class="title">Quick Actions</label>
+        <ul class="options actions">
+          <li class="option action" id="undo">
+            IKONICA
+            <span class="name">Undo</span>
+          </li>
+          <li class="option action" id="redo">
+            IKONICA
+            <span class="name">Redo</span>
+          </li>
+          <li class="option action" id="copy">
+            IKONICA
+            <span class="name">Copy</span>
+          </li>
+          <li class="option action" id="paste">
+            IKONICA
+            <span class="name">Paste</span>
+          </li>
+        </ul>
+      </div>
     </div>
-    <div class="row">
-      <label class="title"> Colours </label>
-      <ul class="option">
-        <li class="option">
-        </li>
-        <li class="option">
-        </li>
-        <li class="option">
-        </li>
-        <li class="option">
-        </li>
-      </ul>
-    </div>
-    <div class="row">
+    <div class="row buttons">
       <button class="clear"> Clear Canvas </button>
       <button class="save"> Save As Image </button>
     </div>
   </section>
   <section class="drawing-board">
-
+    <canvas></canvas>
   </section>
 </div>
