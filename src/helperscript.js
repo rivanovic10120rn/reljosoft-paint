@@ -107,7 +107,29 @@ const cursorLocation = (e) => {
 }
 
 // Crtanje Linije
+const drawLine = (position) => {
+  context.beginPath();
+  context.moveTo(prevMousePoint.x, prevMousePoint.y);
+  context.lineTo(position.x, position.y);
+  context.stroke();
+}
 
 // Crtanje pravougaonika
+const drawRect = (position) => {
+  context.beginPath();
+  const width = position.x - prevMousePoint.x;
+  const height = position.y - prevMousePoint.y;
+  context.rect(prevMousePoint.x, prevMousePoint.y, width, height);
+  //za fill
+  fillShapeCheckbox.checked ? context.fill() : context.stroke();
+  context.closePath();
+}
 
-//
+// Crtanje kruga
+const drawCircle = (position) => {
+  context.beginPath();
+  let r = Math.sqrt(Math.pow((prevMousePoint.x - position.x), 2) + Math.pow((prevMousePoint.y - position.y)), 2);
+  context.arc(prevMousePoint.x, prevMousePoint.y, r, 0, 2* Math.PI);
+
+  fillShapeCheckbox.checked ? context.fill() : context.stroke();
+}
