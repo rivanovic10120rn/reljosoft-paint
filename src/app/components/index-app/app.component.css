@@ -60,7 +60,7 @@ section {
   cursor: pointer;
 }
 
-.options:is(:hover, .active) :where(span,label) {
+.option:is(:hover, .active) :where(span,label) {
   color: black;
 }
 
