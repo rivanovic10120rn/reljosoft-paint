@@ -78,6 +78,15 @@ const saveDrawingState = () => {
   saveDrawingToLocalStorage();
 }
 
+// Reset stanja kanvasa
+const resetDrawingState = () => {
+  localStorage.removeItem("savedDrawing");
+  drawingHistory = [];
+  redoHistory = [];
+  currentStep = 0;
+  resetCanvas();
+}
+
 // Dvojna funkcionalnost za undo i redo
 const activateUndoRedo = (selectedButton) => {
   if (selectedButton.id === "undo" && currentStep > 0) {
@@ -133,3 +142,128 @@ const drawCircle = (position) => {
 
   fillShapeCheckbox.checked ? context.fill() : context.stroke();
 }
+
+// Crtanje trougla
+const drawTriangle = (position) => {
+  context.beginPath();
+  context.moveTo(prevMousePoint.x, prevMousePoint.y);
+  context.lineTo(position.x, position.y);
+  context.lineTo(prevMousePoint.x * 2 - position.x, position.y);
+  context.closePath();
+
+  fillShapeCheckbox.checked ? context.fill() : context.stroke();
+}
+
+// Funkcija za pocetni stroke
+const drawStart = (e) => {
+  e.preventDefault();
+  isDrawing = true;
+  context.beginPath();
+  context.lineCap = "round";
+  prevMousePoint = cursorLocation(e);
+  context.lineWidth = brushSize;
+  context.strokeStyle = selectedColor;
+  context.fillStyle = selectedColor;
+  canvasSnapshot = context.getImageData(0, 0, canvas.width, canvas.height);
+}
+
+// Funkcija za saaamo crtanje
+const drawing = (e) => {
+  if (!isDrawing) return;
+  e.preventDefault();
+  let position = cursorLocation(e);
+  context.clearRect(0,0,canvas.width,canvas.height);
+  context.putImageData(canvasSnapshot, 0, 0);
+
+  if (selectedTool === "brush" || selectedTool === "eraser") {
+    context.strokeStyle = selectedTool === "eraser" ? "#fff" : selectedColor;
+    context.lineTo(position.x, position.y);
+    context.stroke();
+  } else if(selectedTool === "line") {
+    drawLine(position);
+  } else if(selectedTool === "rectangle") {
+    drawRect(position);
+  }else if(selectedTool === "circle") {
+    drawCircle(position);
+  } else {
+    drawTriangle(position);
+  }
+  context.stroke();
+}
+
+// Funkcija za kraj strokea
+const drawStop = () => {
+  if (!isDrawing) return;
+  isDrawing = false;
+  saveDrawingState();
+}
+
+//Event listeneri
+
+//Tools
+toolOptions.forEach(tool => {
+  tool.addEventListener("click", () => {
+    document.querySelector( ".options .active").classList.remove("active");
+    tool.classList.add("active");
+    selectedTool = tool.id;
+  });
+});
+
+//Prokleti slider
+sizeSlider.addEventListener("change", (e) => {
+  e.preventDefault();
+  brushSize = sizeSlider.value;
+});
+
+//Colours
+colorButtons.forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelector(".colors .selected").classList.remove("selected");
+    button.classList.add("selected");
+    selectedColor = window.getComputedStyle(button).getPropertyValue("background-color");
+  });
+});
+
+//Custom Colour
+customColor.addEventListener("input", (e) => {
+  customColor.parentElement.classList.add("active");
+  customColor.parentElement.style.backgroundColor = e.target.value;
+  customColor.parentElement.click();
+});
+
+// undo i redo
+undoredoButtons.forEach(button => {
+  button.addEventListener("click", () => activateUndoRedo(button));
+});
+
+//copy i paste
+
+// Cuvanje slike na kanvasu
+saveImageButton.addEventListener("click", () => {
+  const link = document.createElement("a");
+  link.download = `${new Date().getTime()}.jpg`;
+  link.href = canvas.toDataURL();
+  link.click();
+})
+
+// Ciscenje kanvasa
+clearCanvasButton.addEventListener("click", () => {
+  if (confirm("Are you sure you want to clear the canvas?")) resetDrawingState();
+});
+
+// Ucitavanje poslednje slike
+window.addEventListener("load", () => {
+  resetCanvas();
+  loadLocalStorageDrawing();
+})
+
+window.addEventListener("orientationchange", resetDrawingState);
+window.addEventListener("resize", resetCanvas);
+
+canvas.addEventListener("mousedown", drawStart);
+canvas.addEventListener("touchstart", drawStart);
+canvas.addEventListener("mousemove", drawing);
+canvas.addEventListener("touchmove", drawing);
+canvas.addEventListener("mouseup", drawStop);
+canvas.addEventListener("mouseleave", drawStop);
+canvas.addEventListener("touchend", drawStop);
